@@ -18,49 +18,45 @@
 
   <div class="week-grid">
 
-    <!-- DAY 1 -->
     <div class="day-card" data-day="1">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 1<br><span>Jan 5</span></div>
       <div class="hearts">💖💖</div>
+      <p class="countdown"></p>
     </div>
 
-    <!-- DAY 2 -->
     <div class="day-card" data-day="2">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 2<br><span>Jan 6</span></div>
       <div class="hearts">💖💖</div>
+      <p class="countdown"></p>
     </div>
 
-    <!-- DAY 3 -->
     <div class="day-card" data-day="3">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 3<br><span>Jan 7</span></div>
       <div class="hearts">💖💖</div>
+      <p class="countdown"></p>
     </div>
 
-    <!-- DAY 4 -->
     <div class="day-card" data-day="4">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 4<br><span>Jan 8</span></div>
       <p class="countdown"></p>
     </div>
 
-    <!-- DAY 5 -->
     <div class="day-card" data-day="5">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 5<br><span>Jan 9</span></div>
       <p class="countdown"></p>
     </div>
 
-    <!-- DAY 6 -->
     <div class="day-card" data-day="6">
       <div class="day-icon">🔒</div>
       <div class="day-text">Day 6<br><span>Jan 10</span></div>
       <p class="countdown"></p>
     </div>
 
-    <!-- DAY 7 -->
     <div class="day-card day-7" data-day="7">
       <div class="day-icon">🎂</div>
       <div class="day-text">Day 7<br><span>Jan 11 🎉</span></div>
@@ -70,26 +66,49 @@
   </div>
 
 <script>
-  // 🔧 CHANGE THESE DATES ONLY IF NEEDED
-  const startDate = new Date("2026-01-05"); // Day 1
-  const today = new Date();
-  today.setHours(0,0,0,0);
+  /* ===============================
+     IST TIME HANDLING (CRITICAL)
+  =============================== */
+
+  function getISTDate() {
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000; // UTC + 5:30
+    return new Date(now.getTime() + istOffset);
+  }
+
+  function formatDate(date) {
+    return date.toISOString().split("T")[0]; // YYYY-MM-DD
+  }
+
+  const todayIST = formatDate(getISTDate());
+
+  const unlockDates = {
+    1: "2026-01-05",
+    2: "2026-01-06",
+    3: "2026-01-07",
+    4: "2026-01-08",
+    5: "2026-01-09",
+    6: "2026-01-10",
+    7: "2026-01-11"
+  };
 
   document.querySelectorAll(".day-card").forEach(card => {
-    const day = parseInt(card.dataset.day);
-    const unlockDate = new Date(startDate);
-    unlockDate.setDate(startDate.getDate() + (day - 1));
-
+    const day = card.dataset.day;
+    const unlockDate = unlockDates[day];
     const icon = card.querySelector(".day-icon");
     const countdown = card.querySelector(".countdown");
-    const doneKey = `day${day}Done`;
 
     // 🔒 LOCKED
-    if (today < unlockDate) {
+    if (todayIST < unlockDate) {
       card.classList.add("locked");
+      icon.textContent = "🔒";
 
       if (countdown) {
-        const diffDays = Math.ceil((unlockDate - today) / (1000*60*60*24));
+        const unlock = new Date(unlockDate + "T00:00:00");
+        const diffDays = Math.ceil(
+          (unlock - getISTDate()) / (1000 * 60 * 60 * 24)
+        );
+
         countdown.textContent =
           diffDays === 1
             ? "Opens tomorrow 🤍"
@@ -104,16 +123,11 @@
 
     // 🔓 UNLOCKED
     card.classList.add("unlocked");
+    icon.textContent = "❤️";
+
     card.onclick = () => {
       window.location.href = `days/day${day}.html`;
     };
-
-    // ❤️ COMPLETED
-    if (localStorage.getItem(doneKey) === "yes") {
-      icon.textContent = "❤️";
-    } else {
-      icon.textContent = "🔓";
-    }
   });
 </script>
 
