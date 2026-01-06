@@ -16,12 +16,12 @@
   <div class="day-container">
 
     <h1>Day 3 💕</h1>
-    <p class="subtitle">Some days deserve traditions 😌</p>
+    <p class="subtitle">Some surprises aren’t bought… they’re felt 😌</p>
 
     <!-- STORY BOX -->
     <div id="storyBox" class="message-box">
-      Some places hold memories…<br>
-      Some days demand traditions 💭
+      Wednesdays usually mean one thing… 🍽️  
+      But today felt a little different 💭
     </div>
 
     <!-- ACTION BUTTON -->
@@ -29,22 +29,33 @@
       Reveal today’s surprise 🎁
     </button>
 
-    <!-- IMAGE (HIDDEN INITIALLY) -->
-    <div id="imageBox" class="hidden mt-40">
+    <!-- PHOTO BOX -->
+    <div id="photoBox" class="hidden mt-40">
       <img
-        src="../assets/images/biriyani.jpg"
-        alt="Biriyani Time"
-        style="width:100%; border-radius:22px; box-shadow:0 14px 35px rgba(255,105,180,0.35);"
+        src="../assets/images/her.jpg"
+        alt="You 💖"
+        style="
+          width:100%;
+          border-radius:22px;
+          box-shadow:0 14px 35px rgba(255,105,180,0.35);
+        "
       >
+      <p class="soft-note mt-20">
+        This smile… that’s what I was waiting for 😌
+      </p>
     </div>
 
     <!-- FINAL MESSAGE -->
     <div id="finalMessage" class="final-message hidden mt-40">
-      Go meet your boyfriend now ☺️<br><br>
-      <strong>
-        Today is Wednesday…<br>
-        and some traditions should never be skipped 💖
-      </strong>
+      <p>
+        <strong>
+          You are the surprise.<br>
+          Not just today…<br>
+          but every single day. 💖
+        </strong><br><br>
+        So Wednesday didn’t need biriyani after all.<br>
+        It just needed <em>you</em>.
+      </p>
     </div>
 
     <!-- BACK LINK -->
@@ -60,17 +71,16 @@
 
     const btn = document.getElementById("actionBtn");
     const box = document.getElementById("storyBox");
-    const img = document.getElementById("imageBox");
+    const photo = document.getElementById("photoBox");
     const finalMsg = document.getElementById("finalMessage");
 
-    // If already completed, show final state directly
+    // If already completed
     if (localStorage.getItem("day3Done") === "yes") {
       box.innerHTML = `
-        Wednesday.<br>
-        <strong>Kanji Kada.</strong><br>
-        <strong>And you.</strong> 😋🍗
+        Biriyani was just an excuse 😌<br><br>
+        Because the real surprise today…
       `;
-      img.classList.remove("hidden");
+      photo.classList.remove("hidden");
       finalMsg.classList.remove("hidden");
       btn.style.display = "none";
     }
@@ -78,25 +88,35 @@
     btn.addEventListener("click", () => {
       step++;
 
+      // STEP 1 — Biriyani Mention
       if (step === 1) {
         box.innerHTML = `
-          Today’s surprise is <strong>not a lasting one (Lasts in your mouth for minutes)</strong> 😌<br><br>
-          Please don’t think of taking lunch today…
+          I did think about biriyani today 😋<br><br>
+          Or maybe something else… 👀
         `;
-        btn.innerText = "Tell me more 👀";
+        btn.innerText = "Tell me more 🤍";
       }
 
+      // STEP 2 — Twist
       else if (step === 2) {
         box.innerHTML = `
-          Wednesday.<br>
-          <strong>Kanji Kada.</strong><br>
-          <strong>And you.</strong> 😋🍗
+          But then I realised something 😌<br><br>
+          Food isn’t what makes days special…
         `;
-        btn.innerText = "Okay… now show me 💖";
+        btn.innerText = "Then what is? 💭";
       }
 
+      // STEP 3 — Core Reveal
       else if (step === 3) {
-        img.classList.remove("hidden");
+        box.innerHTML = `
+          Because the real surprise today…
+        `;
+        btn.innerText = "Show me 🥺";
+      }
+
+      // STEP 4 — PHOTO + MESSAGE
+      else if (step === 4) {
+        photo.classList.remove("hidden");
         finalMsg.classList.remove("hidden");
         btn.style.display = "none";
         localStorage.setItem("day3Done", "yes");
