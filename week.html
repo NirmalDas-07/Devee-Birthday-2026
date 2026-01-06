@@ -33,7 +33,7 @@
     </div>
 
     <div class="day-card" data-day="3">
-      <div class="day-icon">🔒</div>
+      <div class="day-icon">❤️</div>
       <div class="day-text">Day 3<br><span>Jan 7</span></div>
       <div class="hearts">💖💖</div>
       <p class="countdown"></p>
@@ -66,71 +66,91 @@
   </div>
 
 <script>
-  /* ===============================
-     IST TIME HANDLING (CRITICAL)
-  =============================== */
+/* ===============================
+   IST DATE HANDLING (CRITICAL)
+================================ */
 
-  function getISTDate() {
-    const now = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000; // UTC + 5:30
-    return new Date(now.getTime() + istOffset);
-  }
+function getISTDate() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // UTC +5:30
+  return new Date(now.getTime() + istOffset);
+}
 
-  function formatDate(date) {
-    return date.toISOString().split("T")[0]; // YYYY-MM-DD
-  }
+function formatDate(date) {
+  return date.toISOString().split("T")[0]; // YYYY-MM-DD
+}
 
-  const todayIST = formatDate(getISTDate());
+const todayIST = formatDate(getISTDate());
 
-  const unlockDates = {
-    1: "2026-01-05",
-    2: "2026-01-06",
-    3: "2026-01-07",
-    4: "2026-01-08",
-    5: "2026-01-09",
-    6: "2026-01-10",
-    7: "2026-01-11"
-  };
+/* ===============================
+   UNLOCK DATES (IST MIDNIGHT)
+================================ */
 
-  document.querySelectorAll(".day-card").forEach(card => {
-    const day = card.dataset.day;
-    const unlockDate = unlockDates[day];
-    const icon = card.querySelector(".day-icon");
-    const countdown = card.querySelector(".countdown");
+const unlockDates = {
+  1: "2026-01-05",
+  2: "2026-01-06",
+  3: "FORCE_OPEN",       // ⭐ SPECIAL CASE
+  4: "2026-01-08",
+  5: "2026-01-09",
+  6: "2026-01-10",
+  7: "2026-01-11"
+};
 
-    // 🔒 LOCKED
-    if (todayIST < unlockDate) {
-      card.classList.add("locked");
-      icon.textContent = "🔒";
+/* ===============================
+   DAY CARD LOGIC
+================================ */
 
-      if (countdown) {
-        const unlock = new Date(unlockDate + "T00:00:00");
-        const diffDays = Math.ceil(
-          (unlock - getISTDate()) / (1000 * 60 * 60 * 24)
-        );
+document.querySelectorAll(".day-card").forEach(card => {
+  const day = card.dataset.day;
+  const icon = card.querySelector(".day-icon");
+  const countdown = card.querySelector(".countdown");
 
-        countdown.textContent =
-          diffDays === 1
-            ? "Opens tomorrow 🤍"
-            : `Opens in ${diffDays} days 📅`;
-      }
-
-      card.onclick = () => {
-        alert("Not yet 😌 Come back on the right day 💕");
-      };
-      return;
-    }
-
-    // 🔓 UNLOCKED
+  /* ⭐ FORCE DAY 3 OPEN */
+  if (unlockDates[day] === "FORCE_OPEN") {
     card.classList.add("unlocked");
     icon.textContent = "❤️";
-
+    if (countdown) countdown.textContent = "";
     card.onclick = () => {
       window.location.href = `days/day${day}.html`;
     };
-  });
+    return;
+  }
+
+  const unlockDate = unlockDates[day];
+
+  /* 🔒 LOCKED */
+  if (todayIST < unlockDate) {
+    card.classList.add("locked");
+    icon.textContent = "🔒";
+
+    if (countdown) {
+      const unlock = new Date(unlockDate + "T00:00:00");
+      const diffDays = Math.ceil(
+        (unlock - getISTDate()) / (1000 * 60 * 60 * 24)
+      );
+
+      countdown.textContent =
+        diffDays === 1
+          ? "Opens tomorrow 🤍"
+          : `Opens in ${diffDays} days 📅`;
+    }
+
+    card.onclick = () => {
+      alert("Not yet 😌 Come back on the right day 💕");
+    };
+    return;
+  }
+
+  /* 🔓 UNLOCKED */
+  card.classList.add("unlocked");
+  icon.textContent = "❤️";
+  if (countdown) countdown.textContent = "";
+
+  card.onclick = () => {
+    window.location.href = `days/day${day}.html`;
+  };
+});
 </script>
 
 </body>
 </html>
-
