@@ -18,7 +18,7 @@
     <h1>Day 6 💕</h1>
     <p class="subtitle">Some feelings are better heard… than read</p>
 
-    <!-- Intro message -->
+    <!-- Intro -->
     <div class="message-box">
       Today’s surprise isn’t something you can hold 💌<br>
       It’s something you need to <strong>listen</strong> 🤍<br><br>
@@ -34,16 +34,33 @@
     <div id="voiceBox" class="hidden mt-30">
 
       <div class="message-box">
+
         <p><strong>🎧 Voice note from your boyfriend</strong></p>
         <p style="font-size:14px; color:#666;">Duration: 7:44</p>
         <p style="font-size:14px; color:#666;">
-          Please listen till the very end 🤍
+          Listen slowly… this one is meant only for you 🤍
         </p>
 
-        <audio id="voiceAudio" controls style="width:100%; margin-top:12px;">
+        <audio
+          id="voiceAudio"
+          controls
+          preload="metadata"
+          style="width:100%; margin-top:14px;"
+        >
           <source src="../assets/audio/day6-voice.mp3" type="audio/mpeg">
           Your browser does not support audio playback.
         </audio>
+
+        <!-- DOWNLOAD OPTION -->
+        <a
+          href="../assets/audio/day6-voice.mp3"
+          download
+          class="romantic-btn"
+          style="display:inline-block; margin-top:18px; padding:10px 24px; font-size:14px;"
+        >
+          Download this voice 🤍
+        </a>
+
       </div>
 
     </div>
@@ -56,9 +73,10 @@
     <!-- FINAL MESSAGE -->
     <div id="finalMessage" class="final-message hidden mt-40">
       <p>
-        I know you can't meet your boyfriend today ☺️<br><br>
+        I know you can’t meet your boyfriend today ☺️<br><br>
         <strong>
-          But Trust me, his thoughts and his voice is only for you 💖
+          But his voice, his thoughts,<br>
+          and his heart — all of that is only yours 💖
         </strong>
       </p>
     </div>
@@ -78,21 +96,27 @@
     const finishBtn = document.getElementById("finishBtn");
     const finalMsg = document.getElementById("finalMessage");
 
-    // Reveal audio card
+    // Always allow reveal (no lock, no memory)
     revealBtn.addEventListener("click", () => {
       voiceBox.classList.remove("hidden");
       revealBtn.style.display = "none";
     });
 
-    // Show "Finished listening" button ONLY after audio ends
+    // Each time audio finishes, show finish button
     audio.addEventListener("ended", () => {
       finishBtn.classList.remove("hidden");
     });
 
-    // Final reveal
+    // Final message (does NOT block replay)
     finishBtn.addEventListener("click", () => {
-      finishBtn.style.display = "none";
       finalMsg.classList.remove("hidden");
+      finishBtn.style.display = "none";
+    });
+
+    // Reset UI when audio is replayed manually
+    audio.addEventListener("play", () => {
+      finishBtn.classList.add("hidden");
+      finalMsg.classList.add("hidden");
     });
   </script>
 
